@@ -61,6 +61,6 @@ CASE(',', Token::Token::comma);
 void Lexer::formToken(Token &Tok, const char *TokEnd,
                       Token::TokenKind Kind) {
   Tok.Kind = Kind;
-  Tok.Text = llvm::StringRef(BufferPtr, TokEnd - BufferPtr);
+  Tok.Text = llvm::StringRef(BufferPtr, TokEnd - BufferPtr); // 记录从 BufferPtr 到 TokEnd 的 token 内容
   BufferPtr = TokEnd;
 }
