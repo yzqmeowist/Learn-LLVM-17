@@ -28,7 +28,7 @@ const char *tok::getPunctuatorSpelling(TokenKind Kind) {
 
 const char *tok::getKeywordSpelling(TokenKind Kind) {
   switch (Kind) {
-#define KEYWORD(ID, FLAG) case kw_ ## ID: return #ID;
+#define KEYWORD(ID, FLAG) case kw_ ## ID: return #ID; // ## 拼接操作符，# 字符串化操作符
 #include "tinylang/Basic/TokenKinds.def"
     default: break;
   }
