@@ -19,10 +19,10 @@ std::unique_ptr<llvm::Module>
 CodeGenerator::run(ModuleDeclaration *Mod,
                    std::string FileName) {
   std::unique_ptr<llvm::Module> M =
-      std::make_unique<llvm::Module>(FileName, Ctx);
-  M->setTargetTriple(TM->getTargetTriple().getTriple());
-  M->setDataLayout(TM->createDataLayout());
-  CGModule CGM(M.get());
+      std::make_unique<llvm::Module>(FileName, Ctx); // 创建 LLVM 模块，即存放所有 IR 代码的容器
+  M->setTargetTriple(TM->getTargetTriple().getTriple()); // arch
+  M->setDataLayout(TM->createDataLayout()); // 设置 datalayout
+  CGModule CGM(M.get()); // 遍历全局声明、生成函数和全集变量 IR
   CGM.run(Mod);
   return M;
 }

@@ -64,8 +64,8 @@ createTargetMachine(const char *Argv0) {
 
   llvm::TargetOptions TargetOptions =
       codegen::InitTargetOptionsFromCodeGenFlags(Triple);
-  std::string CPUStr = codegen::getCPUStr();
-  std::string FeatureStr = codegen::getFeaturesStr();
+  std::string CPUStr = codegen::getCPUStr(); // 具体 CPU 型号
+  std::string FeatureStr = codegen::getFeaturesStr(); // 要启用或禁用的指令集特性
 
   std::string Error;
   const llvm::Target *Target =
@@ -80,7 +80,7 @@ createTargetMachine(const char *Argv0) {
   llvm::TargetMachine *TM = Target->createTargetMachine(
       Triple.getTriple(), CPUStr, FeatureStr, TargetOptions,
       std::optional<llvm::Reloc::Model>(
-          codegen::getRelocModel()));
+          codegen::getRelocModel())); // 创建目标机器实例
   return TM;
 }
 
@@ -88,7 +88,7 @@ bool emit(StringRef Argv0, llvm::Module *M,
           llvm::TargetMachine *TM,
           StringRef InputFilename) {
   CodeGenFileType FileType = codegen::getFileType();
-  if (OutputFilename.empty()) {
+  if (OutputFilename.empty()) { // 输出文件名并追加扩展名
     if (InputFilename == "-") {
       OutputFilename = "-";
     } else {
@@ -126,17 +126,17 @@ bool emit(StringRef Argv0, llvm::Module *M,
 
   legacy::PassManager PM;
   if (FileType == CGFT_AssemblyFile && EmitLLVM) {
-    PM.add(createPrintModulePass(Out->os()));
+    PM.add(createPrintModulePass(Out->os())); // 输出 LLVM IR
   } else {
     if (TM->addPassesToEmitFile(PM, Out->os(), nullptr,
-                                FileType)) {
+                                FileType)) { // 加入一系列后端 Pass
       WithColor::error(llvm::errs(), Argv0)
           << "No support for file type\n";
       return false;
     }
   }
-  PM.run(*M);
-  Out->keep();
+  PM.run(*M); // 运行 PassManager 中的所有 Pass
+  Out->keep(); // 保留最终生成的文件
   return true;
 }
 

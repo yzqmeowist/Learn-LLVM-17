@@ -26,7 +26,7 @@ public:
   CGModule(llvm::Module *M) : M(M) { initialize(); }
   void initialize();
 
-  llvm::LLVMContext &getLLVMCtx() { return M->getContext(); }
+  llvm::LLVMContext &getLLVMCtx() { return M->getContext(); } // 管理整个模块中的类型和敞亮等资源的所有权，确保不同模块之间的数据不会互相干扰
   llvm::Module *getModule() { return M; }
   ModuleDeclaration *getModuleDeclaration() { return Mod; }
 
